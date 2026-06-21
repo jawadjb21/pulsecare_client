@@ -275,7 +275,74 @@ const LoginPage = ({
                                 </div>
 
                                 {/* District */}
+                                <div className="space-y-2 col-span-2 grid grid-cols-2 md:flex-col gap-x-2">
+                                    <div className="col-span-1">
+                                        <Label>District</Label>
+                                        <Controller
+                                            name="district"
+                                            control={control}
+                                            rules={{
+                                                required: "Please choose your district."
+                                            }}
+                                            render={({ field: { onChange, value } }) => (
+                                                <Select value={value} onValueChange={onChange}>
+                                                    <SelectTrigger className="h-14 w-full rounded-2xl border-border/60 bg-background/50 px-5 shadow-sm">
+                                                        <SelectValue placeholder="Select your district." />
+                                                    </SelectTrigger>
 
+                                                    <SelectContent className="rounded-2xl">
+                                                        <SelectGroup>
+                                                            <SelectLabel>Blood Group</SelectLabel>
+
+                                                            {bloodGroups.map((bloodGroup, idx) => (
+                                                                <SelectItem
+                                                                    key={idx}
+                                                                    value={bloodGroup.value}
+                                                                >
+                                                                    {bloodGroup.label}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                            )}
+                                        />
+                                        <FormErrors errors={errors} field={"district"}></FormErrors>
+                                    </div>
+                                    <div className="col-span-1">
+                                        <Label>Upazila</Label>
+                                        <Controller
+                                            name="upazila"
+                                            control={control}
+                                            rules={{
+                                                required: "Please choose your upazila."
+                                            }}
+                                            render={({ field: { onChange, value } }) => (
+                                                <Select value={value} onValueChange={onChange}>
+                                                    <SelectTrigger className="h-14 w-full rounded-2xl border-border/60 bg-background/50 px-5 shadow-sm">
+                                                        <SelectValue placeholder="Select your upazila." />
+                                                    </SelectTrigger>
+
+                                                    <SelectContent className="rounded-2xl">
+                                                        <SelectGroup>
+                                                            <SelectLabel>Blood Group</SelectLabel>
+
+                                                            {bloodGroups.map((bloodGroup, idx) => (
+                                                                <SelectItem
+                                                                    key={idx}
+                                                                    value={bloodGroup.value}
+                                                                >
+                                                                    {bloodGroup.label}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                            )}
+                                        />
+                                        <FormErrors errors={errors} field={"blood"}></FormErrors>
+                                    </div>
+                                </div>
 
                                 {/* Password */}
                                 <div className="space-y-2">
