@@ -39,7 +39,7 @@ const RegisterPassword = ({ errors, field, register, watch }) => {
                         {showPassword ? <EyeClosed /> : <Eye />}
                     </button>
                 </div>
-                <FormErrors errors={errors} field={field["password"]}></FormErrors>
+                <FormErrors errors={errors} field={field[0]}></FormErrors>
             </div>
 
             {/* Confirm Password */}
@@ -70,7 +70,7 @@ const RegisterPassword = ({ errors, field, register, watch }) => {
                         {showConfirmPassword ? <EyeClosed /> : <Eye />}
                     </button>
                 </div>
-                <FormErrors errors={errors} field={field["confirmPassword"]}></FormErrors>
+                <FormErrors errors={errors} field={field[1]}></FormErrors>
             </div>
         </>
     );

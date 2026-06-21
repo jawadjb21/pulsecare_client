@@ -1,17 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import isEmail from "validator/lib/isEmail";
-import { Eye, EyeClosed } from "@gravity-ui/icons";
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import EmailField from "@/components/shared/fields/EmailField";
+import LoginPasswordField from "@/components/shared/fields/LoginPasswordField";
+import registerComponents from "@/data/registerComponents.json";
+
 
 const LoginPage = ({
   heading = "Welcome Back",
@@ -22,6 +22,7 @@ const LoginPage = ({
   className,
 }) => {
   const {
+    control,
     register,
     handleSubmit,
     watch,
@@ -29,8 +30,15 @@ const LoginPage = ({
     setError,
   } = useForm();
 
+  const componentsMap = {
+    EmailField, LoginPasswordField
+  };
+
+  const propsMap = {
+    control, errors, register
+  };
+
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (formData) => {
     debugger;
@@ -135,68 +143,21 @@ const LoginPage = ({
               </div>
 
               <form className="space-y-6" onSubmit={handleSubmit(handleLogin)}>
-                {/* Email */}
-                <div className="space-y-2">
-                  <Label>Email Address</Label>
+                {
+                  registerComponents.map(component => {
+                    if (!component.login) return null;
+                    console.log(component.component);
+                    console.log(componentsMap[component.component]);
+                    const Component = componentsMap[component["component"]];
 
-                  <Input
-                    autoFocus
-                    type="text"
-                    placeholder="Enter your email"
-                    className="h-12 rounded-xl border-border/50 bg-background/70 px-4 focus-visible:ring-primary"
-                    {...register("email", {
-                      required: "Please enter your email.",
-                      validate: (value) =>
-                        isEmail(value) || "Please enter a valid email.",
-                    })}
-                  />
-                  {errors?.email && (
-                    <span className="block rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                      {errors.email.message}
-                    </span>
-                  )}
-                </div>
+                    const props = {};
 
-                {/* Password */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label>Password</Label>
+                    component["props"].forEach(prop => props[prop] = propsMap[prop]);
 
-                    <Link
-                      href="/forgot-password"
-                      className="text-xs text-primary hover:underline"
-                    >
-                      Forgot password?
-                    </Link>
-                  </div>
-                  <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
-                      className="h-12 rounded-xl border-border/50 bg-background/70 px-4 focus-visible:ring-primary"
-                      {...register("password", {
-                        required: "Please enter your password.",
-                        minLength: {
-                          value: 8,
-                          message: "Please enter at least 8 characters.",
-                        },
-                      })}
-                    />
-                    <button
-                      type="button"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeClosed /> : <Eye />}
-                    </button>
-                  </div>
-                  {errors?.password?.message && (
-                    <span className="block rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                      {errors.password.message}
-                    </span>
-                  )}
-                </div>
-
+                    return <Component key={component.id
+                    } field={component.field} {...props}></Component>
+                  })
+                }
                 <Button
                   type="submit"
                   disabled={loading}
@@ -221,7 +182,7 @@ const LoginPage = ({
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 };
 

@@ -41,6 +41,7 @@ const RegisterPage = ({
     const propsMap = {
         control, errors, register, watch
     };
+    console.log(registerComponents);
 
     const [loading, setLoading] = useState(false);
 
@@ -117,7 +118,7 @@ const RegisterPage = ({
                     {/* Left Illustration Section */}
                     <div className="hidden items-center justify-center bg-muted/20 p-12 lg:flex">
                         <Image
-                            src={"/AuthBanner.png"}
+                            src={"/RegFormBanner.png"}
                             alt="Authentication Page Image"
                             width={550}
                             height={1000}
@@ -153,6 +154,7 @@ const RegisterPage = ({
                             >
                                 {
                                     registerComponents.map(component => {
+                                        if(component.loginOnly) return null;
                                         const Component = componentsMap[component["component"]];
 
                                         const props = {};
