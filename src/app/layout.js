@@ -31,8 +31,20 @@ export default function RootLayout({ children }) {
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >{children}
-          <Toaster />
+        >
+          {children}
+          <Toaster
+            position="top-center"
+            richColors
+            toastOptions={{
+              classNames: {
+                toast:
+                  "bg-card/95 backdrop-blur-xl border border-border text-foreground",
+                error: "bg-red-950/80 border-red-700 text-red-200",
+                actionButton: "bg-primary text-primary-foreground",
+              },
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>

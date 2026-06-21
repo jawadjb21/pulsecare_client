@@ -8,25 +8,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import isEmail from "validator/lib/isEmail";
-import { Eye, EyeClosed } from '@gravity-ui/icons';
+import { Eye, EyeClosed } from "@gravity-ui/icons";
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 
-
-const LoginPage = ({ heading = "Welcome Back",
+const LoginPage = ({
+  heading = "Welcome Back",
   description = "Please login to your PulseCare account.",
   buttonText = ["Login", "Please Wait..."],
   signupText = "Need an account?",
   signupUrl = "/register",
-  className
+  className,
 }) => {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-    setError
+    setError,
   } = useForm();
 
   const [loading, setLoading] = useState(false);
@@ -52,10 +52,10 @@ const LoginPage = ({ heading = "Welcome Back",
          */
         callbackURL: "/dashboard",
         /**
-         * remember the user session after the browser is closed. 
+         * remember the user session after the browser is closed.
          *
          */
-        rememberMe: true
+        rememberMe: true,
       });
 
       if (error) {
@@ -65,17 +65,18 @@ const LoginPage = ({ heading = "Welcome Back",
         });
         console.error(error);
         return;
-      };
+      }
     } catch (error) {
       console.error(error);
       setError("root", {
         type: "manual",
-        message: "Something went wrong. Please try again."
-      })
+        message: "Something went wrong. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     if (errors?.root?.message) {
       toast.error(errors.root.message, {
@@ -83,18 +84,19 @@ const LoginPage = ({ heading = "Welcome Back",
         position: "top-center",
         action: {
           label: "Okay",
-          onClick: () => { console.warn("Clicked okay on failed authenticaion") }
-        }
-      })
+          onClick: () => {
+            console.warn("Clicked okay on failed authenticaion");
+          },
+        },
+      });
     }
   }, [errors.root]);
-
 
   return (
     <section
       className={cn(
         "min-h-screen bg-background bg-[radial-gradient(circle_at_top_left,rgba(215,38,61,0.12),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(215,38,61,0.08),transparent_30%)]",
-        className
+        className,
       )}
     >
       <div className="container mx-auto flex min-h-screen items-center justify-center px-4 py-10">
@@ -113,7 +115,6 @@ const LoginPage = ({ heading = "Welcome Back",
           {/* Right Form Section */}
           <div className="flex items-center justify-center p-6 sm:p-10">
             <div className="w-full max-w-md">
-
               {/* Logo */}
               <div className="mb-8 flex flex-col items-center">
                 <Image
@@ -134,7 +135,6 @@ const LoginPage = ({ heading = "Welcome Back",
               </div>
 
               <form className="space-y-6" onSubmit={handleSubmit(handleLogin)}>
-
                 {/* Email */}
                 <div className="space-y-2">
                   <Label>Email Address</Label>
@@ -146,9 +146,8 @@ const LoginPage = ({ heading = "Welcome Back",
                     className="h-12 rounded-xl border-border/50 bg-background/70 px-4 focus-visible:ring-primary"
                     {...register("email", {
                       required: "Please enter your email.",
-                      validate: value =>
-                        isEmail(value) ||
-                        "Please enter a valid email.",
+                      validate: (value) =>
+                        isEmail(value) || "Please enter a valid email.",
                     })}
                   />
                   {errors?.email && (
@@ -175,15 +174,13 @@ const LoginPage = ({ heading = "Welcome Back",
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
                       className="h-12 rounded-xl border-border/50 bg-background/70 px-4 focus-visible:ring-primary"
-                      {...register("password",
-                        {
-                          required: "Please enter your password.",
-                          minLength:
-                          {
-                            value: 8,
-                            message: "Please enter at least 8 characters."
-                          }
-                        })}
+                      {...register("password", {
+                        required: "Please enter your password.",
+                        minLength: {
+                          value: 8,
+                          message: "Please enter at least 8 characters.",
+                        },
+                      })}
                     />
                     <button
                       type="button"
@@ -220,7 +217,6 @@ const LoginPage = ({ heading = "Welcome Back",
                   Sign up
                 </Link>
               </div>
-
             </div>
           </div>
         </div>
