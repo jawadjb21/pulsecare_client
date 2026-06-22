@@ -1,0 +1,184 @@
+"use client";
+
+import { Menu } from "lucide-react";
+
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu";
+
+import { Button } from "@/components/ui/button";
+
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import Image from "next/image";
+import navLinks from "@/data/navLinks.json";
+import { usePathname } from "next/navigation";
+
+const Navbar1 = ({
+  logo = {
+    url: "/",
+    src: "/logo.png",
+    alt: "PulseCare Logo",
+    title: "PulseCare",
+  },
+
+  menu = navLinks.slice(0, 6),
+  auth = navLinks.slice(6,),
+
+  className,
+}) => {
+  const pathname = usePathname();
+
+  return (
+    <section
+      className={cn(
+        "sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md",
+        className
+      )}
+    >
+      <div className="container mx-auto">
+        {/* Desktop Menu */}
+        <nav className="hidden h-20 items-center justify-between lg:flex">
+          {/* Logo */}
+          <Link href={logo.url} className="flex items-center gap-3">
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              width={42}
+              height={42}
+              className="object-contain"
+            />
+
+            <span className="text-2xl font-bold tracking-tight">
+              {logo.title}
+            </span>
+          </Link>
+
+          {/* Nav Links */}
+          <NavigationMenu>
+            <NavigationMenuList className="gap-2">
+              {menu.map((item) => (
+                <NavigationMenuItem key={item.id}>
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href={item.href}
+                      className={cn("rounded-lg px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-primary",
+                        pathname === item.href
+                          ? "bg-primary text-primary-foreground shadow-md"
+                          : "hover:bg-muted hover:text-primary"
+
+                      )}>
+                      {item.label}
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+
+          {/* Auth Buttons */}
+          <div className="flex items-center gap-3">
+            {auth.map((item) => (
+              <Button
+                key={item.id}
+                asChild
+                variant={item.variant || "default"}
+                size="sm"
+              >
+                <Link href={item.href}>{item.label}</Link>
+              </Button>
+            ))}
+          </div>
+        </nav>
+
+        {/* Mobile Menu */}
+        <div className="flex h-20 items-center justify-between px-2 lg:hidden">
+          {/* Logo */}
+          <Link href={logo.url} className="flex items-center gap-2">
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              width={40}
+              height={40}
+            />
+
+            <span className="text-xl font-bold">{logo.title}</span>
+          </Link>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Menu className="size-5" />
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent side="right" className="w-75">
+              <SheetHeader>
+                <SheetTitle>
+                  <Link href={logo.url} className="flex items-center gap-3">
+                    <Image
+                      src={logo.src}
+                      alt={logo.alt}
+                      width={36}
+                      height={36}
+                    />
+
+                    <span className="text-xl font-bold">
+                      {logo.title}
+                    </span>
+                  </Link>
+                </SheetTitle>
+              </SheetHeader>
+
+              <div className="mt-8 flex flex-col px-4 gap-5">
+                {/* Menu Items */}
+                {menu.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    className={cn(
+                      "flex items-center gap-3 rounded-xl px-4 py-3 text-base font-medium transition-all duration-200",
+                      pathname === item.href
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "hover:bg-muted hover:text-primary"
+                    )}>
+                    {item.label}
+                  </Link>
+                ))}
+
+                {/* Divider */}
+                <div className="my-2 border-t" />
+
+                {/* Auth Buttons */}
+                <div className="flex flex-col gap-3">
+                  {auth.map((item) => (
+                    <Button
+                      key={item.id}
+                      asChild
+                      variant={item.variant || "default"}
+                    >
+                      <Link href={item.href}>{item.label}</Link>
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </section >
+  );
+};
+
+export { Navbar1 };
