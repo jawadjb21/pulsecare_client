@@ -1,0 +1,44 @@
+[
+    {
+        "id": 1,
+        "label": "Home",
+        "href": "/"
+    },
+    {
+        "id": 2,
+        "label": "About",
+        "href": "/about"
+    },
+    {
+        "id": 3,
+        "label": "Contact",
+        "href": "/contact"
+    },
+    {
+        "id": 4,
+        "label": "Requests",
+        "href": "/requests"
+    },
+    {
+        "id": 5,
+        "label": "Donors",
+        "href": "/search"
+    },
+    {
+        "id": 6,
+        "label": "Funding",
+        "href": "/funding"
+    },
+    {
+        "id": 7,
+        "label": "Login",
+        "href": "/login",
+        "variant": "outline"
+    },
+    {
+        "id": 8,
+        "label": "Register",
+        "href": "/register",
+        "variant": "default"
+    }
+]

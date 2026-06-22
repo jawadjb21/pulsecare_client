@@ -14,6 +14,9 @@ export const auth = betterAuth({
     additionalFields: {
       role: {
         defaultValue: "donor",
+      },
+      status: {
+        defaultValue: "active",
       }
     }
   },
