@@ -49,28 +49,29 @@ const RegisterPage = ({
         debugger;
         try {
             setLoading(true);
-            const { email, password } = formData;
-
-            const { data, error } = await authClient.signIn.email({
-                /**
-                 * The user email
-                 */
-                email,
-                /**
-                 * The user password
-                 */
-                password,
-                /**
-                 * A URL to redirect to after the user verifies their email (optional)
-                 */
-                callbackURL: "/dashboard",
-                /**
-                 * remember the user session after the browser is closed.
-                 *
-                 */
-                rememberMe: true,
+            const imageFile = formData.file[0];
+            
+            const { name, email, bloodGroup, district, upazila, password, confirmPsasword } = formData;
+            
+            const imageResponse = await fetch(`${process.env.IMAGE_API}?key=${process.env.IMAGE_API_KEY}`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "image/*"
+                },
+                body: imageFile,
             });
 
+            const imageURL = await imageResponse.json()?.data?.url;
+
+            const { data, error } = await authClient.signUp.email({
+                name,
+                email,
+                bloodGroup,
+                district,
+                upazila,
+                password,
+                imageURL,
+            });
             if (error) {
                 setError("root", {
                     type: "manual",
@@ -103,7 +104,7 @@ const RegisterPage = ({
                 },
             });
         }
-    }, [errors.root]);
+    }, [errors?.root]);
 
 
     return (
@@ -154,7 +155,7 @@ const RegisterPage = ({
                             >
                                 {
                                     registerComponents.map(component => {
-                                        if(component.loginOnly) return null;
+                                        if (component.loginOnly) return null;
                                         const Component = componentsMap[component["component"]];
 
                                         const props = {};

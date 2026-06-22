@@ -10,7 +10,7 @@ const BloodGroupField = ({ control, errors, field }) => {
         <div className="space-y-2 col-span-2">
             <Label>Blood Group</Label>
             <Controller
-                name="blood"
+                name="bloodGroup"
                 control={control}
                 rules={{
                     required: "Please choose a blood group.",
