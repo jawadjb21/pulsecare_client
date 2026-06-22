@@ -1,6 +1,7 @@
 "use server";
 export const postImage = async (imageFile) => {
     try {
+        if(!imageFile) return null;
         const formData = new FormData();
         formData.append("image", imageFile);
         const imageResponse = await fetch(`${process.env.IMAGE_API}?key=${process.env.IMAGE_API_KEY}`, {
