@@ -15,6 +15,7 @@ import BloodGroupField from "@/components/shared/fields/BloodGroupField";
 import LocationField from "@/components/shared/fields/LocationField";
 import RegisterPassword from "@/components/shared/fields/RegisterPassword";
 import registerComponents from "@/data/registerComponents.json";
+import { postImage } from "@/lib/actions/postImage";
 
 
 const RegisterPage = ({
@@ -41,7 +42,6 @@ const RegisterPage = ({
     const propsMap = {
         control, errors, register, watch
     };
-    console.log(registerComponents);
 
     const [loading, setLoading] = useState(false);
 
@@ -53,15 +53,7 @@ const RegisterPage = ({
             
             const { name, email, bloodGroup, district, upazila, password, confirmPsasword } = formData;
             
-            const imageResponse = await fetch(`${process.env.IMAGE_API}?key=${process.env.IMAGE_API_KEY}`, {
-                method: "POST",
-                headers: {
-                    "Content-type": "image/*"
-                },
-                body: imageFile,
-            });
-
-            const imageURL = await imageResponse.json()?.data?.url;
+            const imageURL = await postImage(imageFile);
 
             const { data, error } = await authClient.signUp.email({
                 name,
@@ -71,7 +63,9 @@ const RegisterPage = ({
                 upazila,
                 password,
                 imageURL,
+                role,
             });
+            // Catches errors returned by better auth signup api.
             if (error) {
                 setError("root", {
                     type: "manual",
@@ -80,7 +74,8 @@ const RegisterPage = ({
                 console.error(error);
                 return;
             }
-        } catch (error) {
+        } catch (error) { 
+            // Handles exceptions.
             console.error(error);
             setError("root", {
                 type: "manual",
@@ -91,6 +86,7 @@ const RegisterPage = ({
         }
     };
 
+    // Error toast.
     useEffect(() => {
         if (errors?.root?.message) {
             toast.error(errors.root.message, {

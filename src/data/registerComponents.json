@@ -28,7 +28,8 @@
         "component": "AvatarField",
         "props": [
             "errors",
-            "register"
+            "register",
+            "control"
         ],
         "field": [
             "avatar"
