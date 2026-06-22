@@ -33,7 +33,8 @@ const AvatarField = ({ control, errors, register, field }) => {
                 htmlFor="picture"
                 className="group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-background/50 p-8 transition-all hover:border-primary hover:bg-primary/5"
             >
-                {selectedFile?.[0] ? (
+                {/* Check both file and previewURL not null */}
+                {selectedFile?.[0] && previewUrl ? (
                     <>
                         <Image
                             src={previewUrl}
