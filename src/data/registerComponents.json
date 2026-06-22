@@ -55,7 +55,7 @@
         ],
         "field": [
             "district",
-            "upzaila"
+            "upazila"
         ]
     },
     {
@@ -64,7 +64,8 @@
         "props": [
             "errors",
             "register",
-            "watch"
+            "watch",
+            "getValues"
         ],
         "field": [
             "password",

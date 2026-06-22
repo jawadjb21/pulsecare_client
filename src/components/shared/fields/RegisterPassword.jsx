@@ -5,11 +5,9 @@ import { Eye, EyeClosed } from '@gravity-ui/icons';
 import React, { useState } from 'react';
 import FormErrors from './FormErrors';
 
-const RegisterPassword = ({ errors, field, register, watch }) => {
+const RegisterPassword = ({ errors, field, register, getValues }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-    const checkPassword = watch("password");
 
     return (
         <>
@@ -53,11 +51,8 @@ const RegisterPassword = ({ errors, field, register, watch }) => {
                         placeholder="Enter your password"
                         className="h-14 rounded-2xl border-border/60 bg-background/50 px-5 text-base shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary/50"
                         {...register("confirmPassword", {
-                            required: "Please enter your password.",
-                            validate: (value) => {
-                                value === checkPassword ||
-                                    "The passwords don't match.";
-                            },
+                            required: "Please type your password again.",
+                            validate: value => value === getValues("password") || "Passwords don't match",
                         })}
                     />
                     <button

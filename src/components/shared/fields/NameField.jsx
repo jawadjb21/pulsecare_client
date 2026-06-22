@@ -14,7 +14,7 @@ const NameField = ({ errors, field, register }) => {
                 placeholder="Enter your name."
                 className="h-14 rounded-2xl border-border/60 bg-background/50 px-5 text-base shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary/50"
                 {...register("name", {
-                    required: "Please enter your email.",
+                    required: "Please enter your name.",
                     pattern: {
                         value: /^[A-Z ]+$/i,
                         message:

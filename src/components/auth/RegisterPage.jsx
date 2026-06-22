@@ -15,6 +15,7 @@ import BloodGroupField from "@/components/shared/fields/BloodGroupField";
 import LocationField from "@/components/shared/fields/LocationField";
 import RegisterPassword from "@/components/shared/fields/RegisterPassword";
 import registerComponents from "@/data/registerComponents.json";
+import { useRouter } from "next/navigation";
 
 
 const RegisterPage = ({
@@ -33,6 +34,7 @@ const RegisterPage = ({
         control,
         formState: { errors },
         setError,
+        getValues,
     } = useForm();
 
     const componentsMap = {
@@ -40,10 +42,12 @@ const RegisterPage = ({
     };
 
     const propsMap = {
-        control, errors, register, watch
+        control, errors, register, watch, getValues,
     };
 
     const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
 
     const handleRegister = async (formData) => {
         debugger;
@@ -55,9 +59,11 @@ const RegisterPage = ({
 
             const imageFile = avatar?.[0];
 
-
-            const imageURL = await postImage(imageFile);
-
+            // Store null for no image upload.
+            let imageURL = null;
+            if (imageFile) {
+                imageURL = await postImage(imageFile);
+            }
 
             const { data, error } = await authClient.signUp.email({
                 name,
@@ -70,11 +76,11 @@ const RegisterPage = ({
             });
             // Catches errors returned by better auth signup api.
             if (error) {
+                console.error(error);
                 setError("root", {
                     type: "manual",
-                    message: "Invalid Email or Password",
+                    message: error.message || "Registration failed."
                 });
-                console.error(error);
                 return;
             }
         } catch (error) {
@@ -86,6 +92,7 @@ const RegisterPage = ({
             });
         } finally {
             setLoading(false);
+            router.push("/dashboard");
         }
     };
 
