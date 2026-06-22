@@ -11,7 +11,6 @@ export const postImage = async (imageFile) => {
 
         const result = await imageResponse.json();
         const imageURL = result?.data?.url;
-        console.log(imageURL);
 
         return imageURL;
     } catch (error) {

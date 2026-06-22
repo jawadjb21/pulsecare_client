@@ -16,6 +16,7 @@ import LocationField from "@/components/shared/fields/LocationField";
 import RegisterPassword from "@/components/shared/fields/RegisterPassword";
 import registerComponents from "@/data/registerComponents.json";
 import { useRouter } from "next/navigation";
+import { FaGoogle } from "react-icons/fa";
 
 
 const RegisterPage = ({
@@ -53,16 +54,15 @@ const RegisterPage = ({
         debugger;
         try {
             setLoading(true);
-            console.log(formData);
 
             const { name, email, avatar, bloodGroup, district, upazila, password, confirmPsasword } = formData;
 
             const imageFile = avatar?.[0];
 
             // Store null for no image upload.
-            let imageURL = null;
+            let image = null;
             if (imageFile) {
-                imageURL = await postImage(imageFile);
+                image = await postImage(imageFile);
             }
 
             const { data, error } = await authClient.signUp.email({
@@ -72,7 +72,7 @@ const RegisterPage = ({
                 district,
                 upazila,
                 password,
-                imageURL,
+                image,
             });
             // Catches errors returned by better auth signup api.
             if (error) {
@@ -83,6 +83,7 @@ const RegisterPage = ({
                 });
                 return;
             }
+            router.push("/dashboard");
         } catch (error) {
             // Handles exceptions.
             console.error(error);
@@ -92,8 +93,14 @@ const RegisterPage = ({
             });
         } finally {
             setLoading(false);
-            router.push("/dashboard");
         }
+    };
+
+    const handleGoogleSignIn = async () => {
+        const data = await authClient.signIn.social({
+            provider: "google",
+            callbackURL: "/dashboard",
+        });
     };
 
     // Error toast.
@@ -135,8 +142,8 @@ const RegisterPage = ({
                     </div>
 
                     {/* Right Form Section */}
-                    <div className="flex items-center justify-center p-6 sm:p-10">
-                        <div className="w-full max-w-md">
+                    <div className="flex h-full flex-col p-6 sm:p-10">
+                        <div className="mb-8 flex flex-col items-center">
                             {/* Logo */}
                             <div className="mb-8 flex flex-col items-center">
                                 <Image
@@ -155,31 +162,54 @@ const RegisterPage = ({
                                     {description}
                                 </p>
                             </div>
-
-                            <form
-                                className="flex flex-col md:grid md:grid-cols-2 gap-8"
-                                onSubmit={handleSubmit(handleRegister)}
-                            >
-                                {
-                                    registerComponents.map(component => {
-                                        if (component.loginOnly) return null;
-                                        const Component = componentsMap[component["component"]];
-
-                                        const props = {};
-
-                                        component["props"].forEach(prop => props[prop] = propsMap[prop]);
-
-                                        return <Component key={component.id} field={component.field} {...props}></Component>
-                                    })
-                                }
-                                <Button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="h-12 w-full rounded-xl text-base font-semibold shadow-lg md:col-span-2"
+                            <div className="flex-1 pr-2">
+                                <form
+                                    className="flex flex-col md:grid md:grid-cols-2 gap-8"
+                                    onSubmit={handleSubmit(handleRegister)}
                                 >
-                                    {loading ? buttonText[1] : buttonText[0]}
+                                    {
+                                        registerComponents.map(component => {
+                                            if (component.loginOnly) return null;
+                                            const Component = componentsMap[component["component"]];
+
+                                            const props = {};
+
+                                            component["props"].forEach(prop => props[prop] = propsMap[prop]);
+
+                                            return <Component key={component.id} field={component.field} {...props}></Component>
+                                        })
+                                    }
+                                    <Button
+                                        type="submit"
+                                        disabled={loading}
+                                        className="h-12 w-full rounded-xl text-base font-semibold shadow-lg md:col-span-2"
+                                    >
+                                        {loading ? buttonText[1] : buttonText[0]}
+                                    </Button>
+                                </form>
+
+                                <div className="relative my-6">
+                                    <div className="absolute inset-0 flex items-center">
+                                        <span className="w-full border-t border-border" />
+                                    </div>
+
+                                    <div className="relative flex justify-center text-xs uppercase">
+                                        <span className="bg-background px-3 text-muted-foreground">
+                                            Or continue with
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="h-12 w-full rounded-xl border-border/60 bg-background/60 text-base font-medium shadow-sm transition-all hover:bg-muted md:col-span-2"
+                                    onClick={handleGoogleSignIn}
+                                >
+                                    <FaGoogle className="mr-2 h-5 w-5" />
+                                    Continue with Google
                                 </Button>
-                            </form>
+                            </div>
 
                             {/* Footer */}
                             <div className="mt-8 flex justify-center gap-1 text-sm text-muted-foreground">

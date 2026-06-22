@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import EmailField from "@/components/shared/fields/EmailField";
 import LoginPasswordField from "@/components/shared/fields/LoginPasswordField";
 import registerComponents from "@/data/registerComponents.json";
+import { FaGoogle } from "react-icons/fa";
 
 
 const LoginPage = ({
@@ -85,6 +86,13 @@ const LoginPage = ({
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    });
+  };
+
   useEffect(() => {
     if (errors?.root?.message) {
       toast.error(errors.root.message, {
@@ -146,8 +154,7 @@ const LoginPage = ({
                 {
                   registerComponents.map(component => {
                     if (!component.login) return null;
-                    console.log(component.component);
-                    console.log(componentsMap[component.component]);
+
                     const Component = componentsMap[component["component"]];
 
                     const props = {};
@@ -166,6 +173,29 @@ const LoginPage = ({
                   {loading ? buttonText[1] : buttonText[0]}
                 </Button>
               </form>
+
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-border" />
+                </div>
+
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-3 text-muted-foreground">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                className="h-12 w-full rounded-xl border-border/60 bg-background/60 text-base font-medium shadow-sm transition-all hover:bg-muted md:col-span-2"
+                onClick={handleGoogleSignIn}
+              >
+                <FaGoogle className="mr-2 h-5 w-5" />
+                Continue with Google
+              </Button>
+
 
               {/* Footer */}
               <div className="mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
