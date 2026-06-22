@@ -1,0 +1,88 @@
+[
+    {
+        "id": 1,
+        "component": "NameField",
+        
+        "props": [
+            "errors",
+            "register"
+        ],
+        "field": [
+            "name"
+        ]
+    },
+    {
+        "id": 2,
+        "login": true,
+        "component": "EmailField",
+        "props": [
+            "errors",
+            "register"
+        ],
+        "field": [
+            "email"
+        ]
+    },
+    {
+        "id": 3,
+        "component": "AvatarField",
+        "props": [
+            "errors",
+            "register",
+            "control"
+        ],
+        "field": [
+            "avatar"
+        ]
+    },
+    {
+        "id": 4,
+        "component": "BloodGroupField",
+        "props": [
+            "control",
+            "errors"
+        ],
+        "field": [
+            "bloodGroup"
+        ]
+    },
+    {
+        "id": 5,
+        "component": "LocationField",
+        "props": [
+            "control",
+            "errors"
+        ],
+        "field": [
+            "district",
+            "upazila"
+        ]
+    },
+    {
+        "id": 6,
+        "component": "RegisterPassword",
+        "props": [
+            "errors",
+            "register",
+            "watch",
+            "getValues"
+        ],
+        "field": [
+            "password",
+            "confirmPassword"
+        ]
+    },
+    {
+        "id": 7,
+        "login": true,
+        "loginOnly": true,
+        "component": "LoginPasswordField",
+        "props": [
+            "errors",
+            "register"
+        ],
+        "field": [
+            "password"
+        ]
+    }
+]
