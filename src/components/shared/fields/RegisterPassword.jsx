@@ -49,7 +49,7 @@ const RegisterPassword = ({ errors, field, register, watch }) => {
                 </div>
                 <div className="relative">
                     <Input
-                        type={showPassword ? "text" : "password"}
+                        type={showConfirmPassword ? "text" : "password"}
                         placeholder="Enter your password"
                         className="h-14 rounded-2xl border-border/60 bg-background/50 px-5 text-base shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary/50"
                         {...register("confirmPassword", {
