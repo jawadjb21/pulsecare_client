@@ -1,4 +1,5 @@
 import { Banner } from "@/components/home/Banner";
+import { Footer } from "@/components/home/Footer";
 import Navbar from "@/components/home/Navbar";
 import Stats from "@/components/home/Stats";
 import { getSession } from "@/lib/getSession";
@@ -11,6 +12,7 @@ export default async function Home() {
       <Navbar user={user}></Navbar>
       <Banner></Banner>
       <Stats></Stats>
+      <Footer></Footer>
     </div>
   );
 }

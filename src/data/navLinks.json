@@ -40,10 +40,5 @@
         "label": "Register",
         "href": "/register",
         "variant": "default"
-    },
-    {
-        "id": 9,
-        "label": "Logout",
-        "variant": "default"
     }
 ]

@@ -8,9 +8,6 @@ export const getSession = async () => {
     });
 
     const user = session?.user;
-    if (!user) return {
-        "user": false,
-        "message": "No user found",
-    }
+    if (!user) return null;
     return user;
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { Menu } from "lucide-react";
-
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -23,9 +22,9 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 import navLinks from "@/data/navLinks.json";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ModeToggle } from "../theme/ThemeToggle";
-import { authClient } from "@/lib/auth-client";
+import ProfileDropdown from "../home/ProfileDropdown";
 
 const Navbar1 = ({
   logo = {
@@ -37,27 +36,10 @@ const Navbar1 = ({
   user = null,
   className,
 }) => {
-
   const menu = navLinks.slice(0, 6);
-  let auth = []
-  if (!user) {
-    auth = navLinks.slice(6, 8);
-  } else {
-    auth = navLinks.slice(8);
-  }
+  const auth = navLinks.slice(6,);
 
   const pathname = usePathname();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/login"); // redirect to login page
-        },
-      },
-    });
-  }
 
   return (
     <section
@@ -67,8 +49,10 @@ const Navbar1 = ({
       )}
     >
       <div className="container mx-auto">
-        {/* Desktop Menu */}
+
+        {/* DESKTOP */}
         <nav className="hidden h-20 items-center justify-between lg:flex">
+
           {/* Logo */}
           <Link href={logo.url} className="flex items-center gap-3">
             <Image
@@ -76,7 +60,6 @@ const Navbar1 = ({
               alt={logo.alt}
               width={42}
               height={42}
-              className="object-contain"
             />
 
             <span className="text-3xl font-extrabold tracking-tight">
@@ -84,7 +67,7 @@ const Navbar1 = ({
             </span>
           </Link>
 
-          {/* Nav Links */}
+          {/* Navigation */}
           <NavigationMenu>
             <NavigationMenuList className="gap-2">
               {menu.map((item) => (
@@ -92,11 +75,13 @@ const Navbar1 = ({
                   <NavigationMenuLink asChild>
                     <Link
                       href={item.href}
-                      className={cn("rounded-lg px-4 py-2 text-xl font-extrabold transition-colors hover:bg-muted hover:text-primary",
+                      className={cn(
+                        "rounded-lg px-4 py-2 text-xl font-extrabold transition-colors",
                         pathname === item.href
                           ? "bg-primary text-primary-foreground shadow-md"
                           : "hover:bg-muted hover:text-primary"
-                      )}>
+                      )}
+                    >
                       {item.label}
                     </Link>
                   </NavigationMenuLink>
@@ -105,37 +90,31 @@ const Navbar1 = ({
             </NavigationMenuList>
           </NavigationMenu>
 
-          {/* Auth Buttons */}
+          {/* Right Side */}
           <div className="flex items-center gap-3">
             <ModeToggle />
 
-            {user ? auth.map(item => (
-              <Button
-                key={item.id}
-                variant={item.variant || "default"}
-                size="sm"
-                className={"text-lg p-5 cursor-pointer"}
-                onClick={() => handleLogout()}>
-                {item.label}
-              </Button>
-            )) :
+            {user ? (
+              <ProfileDropdown user={user} />
+            ) : (
               auth.map((item) => (
                 <Button
                   key={item.id}
                   asChild
-                  className={"text-lg p-5 cursor-pointer"}
+                  className="text-lg p-5 cursor-pointer"
                   variant={item.variant || "default"}
                   size="sm"
                 >
                   <Link href={item.href}>{item.label}</Link>
                 </Button>
               ))
-            }
+            )}
           </div>
         </nav>
 
-        {/* Mobile Menu */}
+        {/* MOBILE */}
         <div className="flex h-20 items-center justify-between px-2 lg:hidden">
+
           {/* Logo */}
           <Link href={logo.url} className="flex items-center gap-2">
             <Image
@@ -149,83 +128,86 @@ const Navbar1 = ({
               {logo.title}
             </span>
           </Link>
-          <div className="flex justify-between items-center gapx-2">
-            <div className="flex justify-end px-4">
-              <ModeToggle />
-            </div>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="size-5" />
-                </Button>
-              </SheetTrigger>
 
-              <SheetContent side="right" className="w-75">
-                <SheetHeader>
-                  <SheetTitle>
-                    <Link href={logo.url} className="flex items-center gap-3">
-                      <Image
-                        src={logo.src}
-                        alt={logo.alt}
-                        width={36}
-                        height={36}
-                      />
+          <div className="flex items-center gap-3">
+            <ModeToggle />
 
-                      <span className="text-xl font-bold">
-                        {logo.title}
-                      </span>
-                    </Link>
-                  </SheetTitle>
-                </SheetHeader>
+            {user ? (
+              <ProfileDropdown user={user} />
+            ) : (
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <Menu className="size-5" />
+                  </Button>
+                </SheetTrigger>
 
-                <div className="mt-8 flex flex-col px-4 gap-5">
-                  {/* Menu Items */}
-                  {menu.map((item) => (
-                    <Link
-                      key={item.id}
-                      href={item.href}
-                      className={cn(
-                        "flex items-center gap-3 rounded-xl px-4 py-3 text-secondary-foreground text-2xl font-extrabold transition-all duration-200",
-                        pathname === item.href
-                          ? "bg-primary text-primary-foreground shadow-md"
-                          : "hover:bg-muted hover:text-primary"
-                      )}>
-                      {item.label}
-                    </Link>
-                  ))}
+                <SheetContent side="right" className="w-[320px]">
 
-                  {/* Divider */}
-                  <div className="my-2 border-t" />
+                  <SheetHeader>
+                    <SheetTitle>
+                      <Link
+                        href={logo.url}
+                        className="flex items-center gap-3"
+                      >
+                        <Image
+                          src={logo.src}
+                          alt={logo.alt}
+                          width={36}
+                          height={36}
+                        />
 
-                  {/* Auth Buttons */}
-                  <div className="flex flex-col gap-3">
-                    {user ? auth.map(item => (
-                      <Button
+                        <span className="text-xl font-bold">
+                          {logo.title}
+                        </span>
+                      </Link>
+                    </SheetTitle>
+                  </SheetHeader>
+
+                  <div className="mt-8 flex flex-col gap-4 px-4">
+
+                    {/* Nav links */}
+                    {menu.map((item) => (
+                      <Link
                         key={item.id}
-                        className={"text-lg p-5 cursor-pointer"}
-                        variant={item.variant || "default"}
-                        onClick={() => handleLogout()}
+                        href={item.href}
+                        className={cn(
+                          "rounded-xl px-4 py-3 text-xl font-bold transition-all",
+                          pathname === item.href
+                            ? "bg-primary text-primary-foreground shadow-md"
+                            : "hover:bg-muted hover:text-primary"
+                        )}
                       >
                         {item.label}
-                      </Button>
-                    )) : auth.map((item) => (
-                      <Button
-                        key={item.id}
-                        asChild
-                        className={"text-lg p-5 cursor-pointer"}
-                        variant={item.variant || "default"}
-                      >
-                        <Link href={item.href}>{item.label}</Link>
-                      </Button>
+                      </Link>
                     ))}
+
+                    <div className="my-2 border-t" />
+
+                    {/* Login/Register */}
+                    <div className="flex flex-col gap-3">
+                      {auth.map((item) => (
+                        <Button
+                          key={item.id}
+                          asChild
+                          variant={item.variant || "default"}
+                          className="h-12 text-lg"
+                        >
+                          <Link href={item.href}>
+                            {item.label}
+                          </Link>
+                        </Button>
+                      ))}
+                    </div>
+
                   </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+                </SheetContent>
+              </Sheet>
+            )}
           </div>
         </div>
       </div>
-    </section >
+    </section>
   );
 };
 
