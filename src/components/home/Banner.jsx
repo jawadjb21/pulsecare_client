@@ -102,12 +102,10 @@ const Banner = (props) => {
                         {headingBeforeFlip}
                     </h1>
 
-                    <div className="my-5 flex justify-center">
-                        <ContainerTextFlip
-                            className={flipRowClassName}
-                            words={flipWords}
-                        />
-                    </div>
+                    <ContainerTextFlip
+                        className={flipRowClassName}
+                        words={flipWords}
+                    />
 
                     <h2 className="text-4xl font-bold text-muted-foreground md:text-5xl">
                         {headingAfterFlip}

@@ -115,7 +115,7 @@ const Navbar1 = ({
                 key={item.id}
                 variant={item.variant || "default"}
                 size="sm"
-                className={"text-xl p-5"}
+                className={"text-lg p-5 cursor-pointer"}
                 onClick={() => handleLogout()}>
                 {item.label}
               </Button>
@@ -124,7 +124,7 @@ const Navbar1 = ({
                 <Button
                   key={item.id}
                   asChild
-                  className={"text-xl p-5"}
+                  className={"text-lg p-5 cursor-pointer"}
                   variant={item.variant || "default"}
                   size="sm"
                 >
@@ -203,7 +203,7 @@ const Navbar1 = ({
                     {user ? auth.map(item => (
                       <Button
                         key={item.id}
-                        className={"text-lg p-5"}
+                        className={"text-lg p-5 cursor-pointer"}
                         variant={item.variant || "default"}
                         onClick={() => handleLogout()}
                       >
@@ -213,6 +213,7 @@ const Navbar1 = ({
                       <Button
                         key={item.id}
                         asChild
+                        className={"text-lg p-5 cursor-pointer"}
                         variant={item.variant || "default"}
                       >
                         <Link href={item.href}>{item.label}</Link>
