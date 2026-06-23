@@ -12,6 +12,7 @@ import { ContainerTextFlip } from "@/components/ui/container-text-flip";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import navLinks from "@/data/navLinks.json";
 
 const flipWordsDefault = [
     "Save Lives",
@@ -30,8 +31,8 @@ const defaultProps = {
         "PulseCare connects blood donors with patients in need. Find verified donors instantly, donate blood, and become part of a life-saving community.",
 
     buttonPrimary: {
-        text: "Become a Donor",
-        href: "/register",
+        text: "Request blood",
+        href: "/requests",
     },
 
     buttonSecondary: {
@@ -102,10 +103,14 @@ const Banner = (props) => {
                         {headingBeforeFlip}
                     </h1>
 
-                    <ContainerTextFlip
-                        className={flipRowClassName}
-                        words={flipWords}
-                    />
+                    <div className="mt-4 flex justify-center">
+                        <div className="min-w-105 h-22.5 flex items-center justify-center">
+                            <ContainerTextFlip
+                                className={flipRowClassName}
+                                words={flipWords}
+                            />
+                        </div>
+                    </div>
 
                     <h2 className="text-4xl font-bold text-muted-foreground md:text-5xl">
                         {headingAfterFlip}
