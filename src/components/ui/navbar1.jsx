@@ -45,7 +45,6 @@ const Navbar1 = ({
   } else {
     auth = navLinks.slice(8);
   }
-  console.log(menu, auth)
 
   const pathname = usePathname();
   const router = useRouter();

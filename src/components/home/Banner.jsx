@@ -80,7 +80,7 @@ const Banner = (props) => {
     return (
         <section
             className={cn(
-                "relative overflow-hidden py-24 lg:py-32",
+                "relative overflow-hidden py-12 lg:py-18",
                 className
             )}
         >
