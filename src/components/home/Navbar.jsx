@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navbar1 } from '../ui/navbar1';
 
-const Navbar = () => {
+const Navbar = ({ user }) => {
     return (
-        <Navbar1></Navbar1>
+        <Navbar1 user={user}></Navbar1>
     );
 };
 

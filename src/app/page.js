@@ -1,10 +1,12 @@
 import Navbar from "@/components/home/Navbar";
+import { getSession } from "@/lib/getSession";
 import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
+  const user = await getSession();
   return (
     <div className="flex flex-col flex-1 bg-zinc-50 font-sans dark:bg-black">
-      <Navbar></Navbar>
+      <Navbar user={user}></Navbar>
     </div>
   );
 }
