@@ -36,8 +36,8 @@ const Navbar1 = ({
   user = null,
   className,
 }) => {
-  const menu = navLinks.slice(0, 6);
-  const auth = navLinks.slice(6,);
+  const menu = navLinks.slice(0, 5);
+  const auth = navLinks.slice(5,);
 
   const pathname = usePathname();
 
@@ -72,19 +72,17 @@ const Navbar1 = ({
             <NavigationMenuList className="gap-2">
               {menu.map((item) => (
                 <NavigationMenuItem key={item.id}>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "rounded-lg px-4 py-2 text-xl font-extrabold transition-colors",
-                        pathname === item.href
-                          ? "bg-primary text-primary-foreground shadow-md"
-                          : "hover:bg-muted hover:text-primary"
-                      )}
-                    >
-                      {item.label}
-                    </Link>
-                  </NavigationMenuLink>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "rounded-lg px-4 py-2 text-xl font-extrabold transition-all duration-200",
+                      pathname === item.href
+                        ? "bg-primary text-primary-foreground shadow-md hover:bg-primary"
+                        : "hover:bg-muted hover:text-primary"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>

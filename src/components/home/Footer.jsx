@@ -8,8 +8,8 @@ import {
     FaGithub,
     FaInstagram,
     FaLinkedin,
-    FaTwitter,
 } from "react-icons/fa";
+import { FaSquareXTwitter } from "react-icons/fa6";
 
 import { cn } from "@/lib/utils";
 
@@ -60,27 +60,27 @@ const defaultProps = {
     socialLinks: [
         {
             icon: <FaFacebook className="size-5" />,
-            href: "#",
+            href: "https://www.facebook.com",
             label: "Facebook",
         },
         {
             icon: <FaInstagram className="size-5" />,
-            href: "#",
+            href: "https://www.instagram.com",
             label: "Instagram",
         },
         {
-            icon: <FaTwitter className="size-5" />,
-            href: "#",
+            icon: <FaSquareXTwitter className="size-5" />,
+            href: "https://www.x.com",
             label: "Twitter",
         },
         {
             icon: <FaLinkedin className="size-5" />,
-            href: "#",
+            href: "https://www.linkedin.com",
             label: "LinkedIn",
         },
         {
             icon: <FaGithub className="size-5" />,
-            href: "#",
+            href: "https://www.github.com/jawadjb21",
             label: "GitHub",
         },
     ],

@@ -3,7 +3,6 @@ import React from "react";
 import {
     ArrowRight,
     HeartPulse,
-    Users,
     MapPin,
     ShieldCheck,
 } from "lucide-react";
@@ -12,7 +11,6 @@ import { ContainerTextFlip } from "@/components/ui/container-text-flip";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import navLinks from "@/data/navLinks.json";
 
 const flipWordsDefault = [
     "Save Lives",
