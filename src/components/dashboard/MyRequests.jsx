@@ -1,5 +1,7 @@
 "use client";
 
+import { format } from "date-fns";
+
 import { Button } from "@/components/ui/button";
 
 import {
@@ -22,42 +24,35 @@ import {
 } from "@/components/ui/card";
 
 import { Pencil, Trash2 } from "lucide-react";
+
 import UpdateRequestModal from "./UpdateRequestModal";
 
-// import UpdateRequestModal from "./UpdateRequestModal";
+export default function MyRequests({
+    user,
+    requests = [],
+}) {
 
-// Temporary mock data
-const requests = [
-    {
-        _id: "1",
-        recipientName: "Akbor",
-        bloodGroup: "AB+",
-        district: "Noakhali",
-        upazila: "Companiganj",
-        neededBy: "2026-06-25",
-        status: "pending",
-    },
-    {
-        _id: "2",
-        recipientName: "Rahim",
-        bloodGroup: "O-",
-        district: "Dhaka",
-        upazila: "Dhanmondi",
-        neededBy: "2026-06-28",
-        status: "inprogress",
-    },
-];
-
-export default function MyRequests({ user }) {
-    const handleUpdate = (request) => {
-        console.log("Update:", request);
-    };
-
-    const handleDelete = (requestId) => {
+    const handleDelete = async (requestId) => {
         console.log("Delete:", requestId);
 
         // TODO:
-        // Open confirmation dialog / call delete API
+        // Call delete API
+    };
+
+    const getStatusVariant = (status) => {
+        switch (status) {
+            case "pending":
+                return "secondary";
+
+            case "inprogress":
+                return "default";
+
+            case "completed":
+                return "outline";
+
+            default:
+                return "secondary";
+        }
     };
 
     return (
@@ -78,10 +73,23 @@ export default function MyRequests({ user }) {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Recipient</TableHead>
-                                <TableHead>Blood Group</TableHead>
-                                <TableHead>Location</TableHead>
-                                <TableHead>Needed By</TableHead>
-                                <TableHead>Status</TableHead>
+
+                                <TableHead>
+                                    Blood Group
+                                </TableHead>
+
+                                <TableHead>
+                                    Location
+                                </TableHead>
+
+                                <TableHead>
+                                    Needed By
+                                </TableHead>
+
+                                <TableHead>
+                                    Status
+                                </TableHead>
+
                                 <TableHead className="text-center">
                                     Actions
                                 </TableHead>
@@ -89,47 +97,58 @@ export default function MyRequests({ user }) {
                         </TableHeader>
 
                         <TableBody>
-                            {requests.length > 0 ? (
+                            {requests?.length > 0 ? (
                                 requests.map((request) => (
                                     <TableRow key={request._id}>
+
+                                        {/* Name */}
                                         <TableCell className="font-semibold">
-                                            {request.recipientName}
+                                            {request.name}
                                         </TableCell>
 
+                                        {/* Blood Group */}
                                         <TableCell>
                                             <Badge variant="destructive">
                                                 {request.bloodGroup}
                                             </Badge>
                                         </TableCell>
 
+                                        {/* Location */}
                                         <TableCell>
                                             {request.upazila},{" "}
                                             {request.district}
                                         </TableCell>
 
+                                        {/* Date */}
                                         <TableCell>
-                                            {request.neededBy}
+                                            {request.neededBy
+                                                ? format(
+                                                    new Date(
+                                                        request.neededBy
+                                                    ),
+                                                    "PPP"
+                                                )
+                                                : "N/A"}
                                         </TableCell>
 
+                                        {/* Status */}
                                         <TableCell>
                                             <Badge
-                                                variant={
-                                                    request.status === "pending"
-                                                        ? "secondary"
-                                                        : request.status ===
-                                                            "inprogress"
-                                                            ? "default"
-                                                            : "outline"
-                                                }
+                                                variant={getStatusVariant(
+                                                    request.status
+                                                )}
                                             >
                                                 {request.status}
                                             </Badge>
                                         </TableCell>
 
+                                        {/* Actions */}
                                         <TableCell>
                                             <div className="flex items-center justify-center gap-2">
 
-                                                <UpdateRequestModal request={request}>
+                                                <UpdateRequestModal
+                                                    request={request}
+                                                >
                                                     <Button
                                                         size="icon"
                                                         variant="outline"
@@ -139,13 +158,14 @@ export default function MyRequests({ user }) {
                                                     </Button>
                                                 </UpdateRequestModal>
 
-
                                                 <Button
                                                     size="icon"
                                                     variant="outline"
                                                     className="hover:border-destructive hover:text-destructive"
                                                     onClick={() =>
-                                                        handleDelete(request._id)
+                                                        handleDelete(
+                                                            request._id
+                                                        )
                                                     }
                                                 >
                                                     <Trash2 className="h-4 w-4" />
@@ -161,7 +181,7 @@ export default function MyRequests({ user }) {
                                         colSpan={6}
                                         className="h-32 text-center text-muted-foreground"
                                     >
-                                        No requests found.
+                                        No blood requests found.
                                     </TableCell>
                                 </TableRow>
                             )}
