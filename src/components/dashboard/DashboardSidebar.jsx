@@ -13,7 +13,8 @@ import {
     PlusCircle,
     LogOut,
     Menu,
-    User
+    User,
+    ShieldUser
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -29,21 +30,31 @@ const links = [
         label: "Dashboard",
         href: "/dashboard",
         icon: Home,
+        roles: ["donor", "admin", "volunteer"]
     },
     {
         label: "Profile",
         href: "/dashboard/profile",
         icon: User,
+        roles: ["donor", "admin", "volunteer"]
     },
     {
         label: "My Requests",
         href: "/dashboard/my-requests",
         icon: ClipboardList,
+        roles: ["donor", "admin", "volunteer"]
     },
     {
         label: "Create Request",
         href: "/dashboard/create-request",
         icon: PlusCircle,
+        roles: ["donor", "admin", "volunteer"]
+    },
+    {
+        label: "All Users",
+        href: "/dashboard/all-users",
+        icon: ShieldUser,
+        roles: ["admin"]
     }
 ];
 

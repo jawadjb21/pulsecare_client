@@ -3,10 +3,9 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-export const getMyRequests = async (
-    userId,
+export const getAllUsers = async (
     page = 1,
-    limit = 3
+    limit = 10
 ) => {
     try {
         const token = await auth.api.getToken({
@@ -14,7 +13,7 @@ export const getMyRequests = async (
         });
 
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/requests/user/${userId}?page=${page}&limit=${limit}`,
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/users?page=${page}&limit=${limit}`,
             {
                 cache: "no-store",
                 headers: {
@@ -24,26 +23,24 @@ export const getMyRequests = async (
         );
 
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message);
+            throw new Error("Failed to fetch users");
         }
 
         const result = await response.json();
 
         return {
-            requests: result.data,
+            users: result.data,
             pagination: result.pagination,
         };
-
     } catch (error) {
         console.log(error);
 
         return {
-            requests: [],
+            users: [],
             pagination: {
                 currentPage: 1,
                 totalPages: 1,
-                totalRequests: 0,
+                totalUsers: 0,
             },
         };
     }

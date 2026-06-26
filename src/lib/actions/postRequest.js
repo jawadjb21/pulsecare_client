@@ -5,37 +5,47 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
 export const postRequest = async (formData) => {
-    const token = await auth.api.getToken({
-        headers: await headers(),
-    });
-
-    const data = {
-        name: formData.name.trim(),
-        bloodGroup: formData.bloodGroup,
-        district: formData.district,
-        upazila: formData.upazila,
-        neededBy: formData.neededBy,
-        userId: formData.userId,
-    };
-
     try {
+        const token = await auth.api.getToken({
+            headers: await headers(),
+        });
+
+        if (!token?.token) {
+            return {
+                success: false,
+                message: "Unauthorized. Please login again.",
+            };
+        }
+
+        const data = {
+            name: formData.name.trim(),
+            bloodGroup: formData.bloodGroup,
+            district: formData.district,
+            upazila: formData.upazila,
+            neededBy: formData.neededBy,
+        };
+
         const request = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_URL}/requests`,
             {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    authorization: `Bearer ${token?.token}`,
+                    Authorization: `Bearer ${token.token}`,
                 },
                 body: JSON.stringify(data),
             }
         );
 
-        if (!request.ok) {
-            throw new Error("Failed to create request");
-        }
-
         const response = await request.json();
+
+        if (!request.ok) {
+            return {
+                success: false,
+                message:
+                    response.message || "Failed to create request",
+            };
+        }
 
         revalidatePath("/dashboard/my-requests");
 
@@ -45,7 +55,7 @@ export const postRequest = async (formData) => {
 
         return {
             success: false,
-            message: error.message,
+            message: "Something went wrong.",
         };
     }
 };
