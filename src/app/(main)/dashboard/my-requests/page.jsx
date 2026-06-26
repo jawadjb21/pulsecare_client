@@ -2,17 +2,22 @@ import MyRequests from "@/components/dashboard/MyRequests";
 import { getSession } from "@/lib/getSession";
 import { getMyRequests } from "@/lib/actions/getMyRequests";
 
-const page = async () => {
+export default async function Page({ searchParams }) {
     const user = await getSession();
 
-    const requests = await getMyRequests(user.id);
+    // unwrap searchParams first
+    const params = await searchParams;
+
+    const page = Number(params.page) || 1;
+
+    const { requests, pagination } =
+        await getMyRequests(user.id, page);
 
     return (
         <MyRequests
             user={user}
             requests={requests}
+            pagination={pagination}
         />
     );
-};
-
-export default page;
+}

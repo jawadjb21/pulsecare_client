@@ -1,9 +1,13 @@
 "use server";
 
-export const getMyRequests = async (userId) => {
+export const getMyRequests = async (
+    userId,
+    page = 1,
+    limit = 3
+) => {
     try {
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/requests/user/${userId}`,
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/requests/user/${userId}?page=${page}&limit=${limit}`,
             {
                 cache: "no-store",
             }
@@ -15,9 +19,21 @@ export const getMyRequests = async (userId) => {
 
         const result = await response.json();
 
-        return result.data;
+        return {
+            requests: result.data,
+            pagination: result.pagination,
+        };
+
     } catch (error) {
         console.log(error);
-        return [];
+
+        return {
+            requests: [],
+            pagination: {
+                currentPage: 1,
+                totalPages: 1,
+                totalRequests: 0,
+            },
+        };
     }
 };

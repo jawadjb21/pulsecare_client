@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 
@@ -23,20 +25,37 @@ import {
     CardDescription,
 } from "@/components/ui/card";
 
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import { Pencil, Trash2 } from "lucide-react";
 
 import UpdateRequestModal from "./UpdateRequestModal";
+import { deleteRequest } from "@/lib/actions/deleteRequest";
 
 export default function MyRequests({
     user,
     requests = [],
+    pagination,
 }) {
 
     const handleDelete = async (requestId) => {
-        console.log("Delete:", requestId);
+        const response = await deleteRequest(requestId);
 
-        // TODO:
-        // Call delete API
+        if (response.success) {
+            toast.success(response.message);
+        } else {
+            toast.error(response.message);
+        }
     };
 
     const getStatusVariant = (status) => {
@@ -67,29 +86,18 @@ export default function MyRequests({
                 </CardDescription>
             </CardHeader>
 
-            <CardContent>
-                <div className="overflow-x-auto rounded-2xl border px-4">
+            <CardContent className="space-y-6">
+
+                {/* Table */}
+                <div className="overflow-x-auto rounded-2xl border">
                     <Table>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Recipient</TableHead>
-
-                                <TableHead>
-                                    Blood Group
-                                </TableHead>
-
-                                <TableHead>
-                                    Location
-                                </TableHead>
-
-                                <TableHead>
-                                    Needed By
-                                </TableHead>
-
-                                <TableHead>
-                                    Status
-                                </TableHead>
-
+                                <TableHead>Blood Group</TableHead>
+                                <TableHead>Location</TableHead>
+                                <TableHead>Needed By</TableHead>
+                                <TableHead>Status</TableHead>
                                 <TableHead className="text-center">
                                     Actions
                                 </TableHead>
@@ -101,7 +109,7 @@ export default function MyRequests({
                                 requests.map((request) => (
                                     <TableRow key={request._id}>
 
-                                        {/* Name */}
+                                        {/* Recipient */}
                                         <TableCell className="font-semibold">
                                             {request.name}
                                         </TableCell>
@@ -146,6 +154,7 @@ export default function MyRequests({
                                         <TableCell>
                                             <div className="flex items-center justify-center gap-2">
 
+                                                {/* Update */}
                                                 <UpdateRequestModal
                                                     request={request}
                                                 >
@@ -158,18 +167,52 @@ export default function MyRequests({
                                                     </Button>
                                                 </UpdateRequestModal>
 
-                                                <Button
-                                                    size="icon"
-                                                    variant="outline"
-                                                    className="hover:border-destructive hover:text-destructive"
-                                                    onClick={() =>
-                                                        handleDelete(
-                                                            request._id
-                                                        )
-                                                    }
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
+                                                {/* Delete */}
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button
+                                                            size="icon"
+                                                            variant="outline"
+                                                            className="hover:border-destructive hover:text-destructive"
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </AlertDialogTrigger>
+
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>
+                                                                Delete Request?
+                                                            </AlertDialogTitle>
+
+                                                            <AlertDialogDescription>
+                                                                This action
+                                                                cannot be
+                                                                undone. This
+                                                                will permanently
+                                                                delete your
+                                                                blood request.
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogCancel>
+                                                                Cancel
+                                                            </AlertDialogCancel>
+
+                                                            <AlertDialogAction
+                                                                onClick={() =>
+                                                                    handleDelete(
+                                                                        request._id
+                                                                    )
+                                                                }
+                                                                className="bg-destructive hover:bg-destructive/90"
+                                                            >
+                                                                Delete
+                                                            </AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
 
                                             </div>
                                         </TableCell>
@@ -188,6 +231,47 @@ export default function MyRequests({
                         </TableBody>
                     </Table>
                 </div>
+
+                {/* Pagination */}
+                {pagination?.totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-4">
+
+                        <Button
+                            asChild
+                            variant="outline"
+                            disabled={
+                                pagination.currentPage === 1
+                            }
+                        >
+                            <Link
+                                href={`/dashboard/my-requests?page=${pagination.currentPage - 1}`}
+                            >
+                                Previous
+                            </Link>
+                        </Button>
+
+                        <span className="text-sm font-medium">
+                            Page {pagination.currentPage} of{" "}
+                            {pagination.totalPages}
+                        </span>
+
+                        <Button
+                            asChild
+                            variant="outline"
+                            disabled={
+                                pagination.currentPage ===
+                                pagination.totalPages
+                            }
+                        >
+                            <Link
+                                href={`/dashboard/my-requests?page=${pagination.currentPage + 1}`}
+                            >
+                                Next
+                            </Link>
+                        </Button>
+
+                    </div>
+                )}
             </CardContent>
         </Card>
     );
