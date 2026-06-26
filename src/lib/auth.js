@@ -18,6 +18,18 @@ export const auth = betterAuth({
       },
       status: {
         defaultValue: "active",
+      },
+      bloodGroup: {
+        type: "string",
+        required: false
+      },
+      district: {
+        type: "string",
+        required: false
+      },
+      upazila: {
+        type: "string",
+        required: false
       }
     }
   },

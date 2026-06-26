@@ -97,7 +97,7 @@ const ProfileDropdown = ({ user }) => {
 
                     <DropdownMenuItem asChild>
                         <Link
-                            href="#"
+                            href="/dashboard/profile"
                             className="cursor-pointer"
                         >
                             <User className="mr-2 h-4 w-4" />
