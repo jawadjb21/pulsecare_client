@@ -13,32 +13,81 @@ export const getMyRequests = async (
             headers: await headers(),
         });
 
+        if (!token?.token) {
+            return {
+                success: false,
+                message: "Please login again.",
+                requests: [],
+                pagination: {
+                    currentPage: 1,
+                    totalPages: 1,
+                    totalRequests: 0,
+                },
+            };
+        }
+
         const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_URL}/requests/user/${userId}?page=${page}&limit=${limit}`,
             {
                 cache: "no-store",
                 headers: {
-                    Authorization: `Bearer ${token?.token}`,
+                    Authorization: `Bearer ${token.token}`,
                 },
             }
         );
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message);
-        }
-
         const result = await response.json();
 
+        if (response.status === 401) {
+            return {
+                success: false,
+                message: "Unauthorized. Please login again.",
+                requests: [],
+                pagination: {
+                    currentPage: 1,
+                    totalPages: 1,
+                    totalRequests: 0,
+                },
+            };
+        }
+
+        if (response.status === 403) {
+            return {
+                success: false,
+                message:
+                    result.message ||
+                    "You do not have permission to view these requests.",
+                requests: [],
+                pagination: {
+                    currentPage: 1,
+                    totalPages: 1,
+                    totalRequests: 0,
+                },
+            };
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                result.message || "Failed to fetch requests."
+            );
+        }
+
         return {
-            requests: result.data,
-            pagination: result.pagination,
+            success: true,
+            requests: result.data || [],
+            pagination: result.pagination || {
+                currentPage: 1,
+                totalPages: 1,
+                totalRequests: 0,
+            },
         };
 
     } catch (error) {
         console.log(error);
 
         return {
+            success: false,
+            message: error.message || "Something went wrong.",
             requests: [],
             pagination: {
                 currentPage: 1,

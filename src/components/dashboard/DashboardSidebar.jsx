@@ -54,7 +54,7 @@ const links = [
         label: "All Users",
         href: "/dashboard/all-users",
         icon: ShieldUser,
-        roles: ["admin"]
+        roles: ["admin", "volunteer"]
     }
 ];
 
@@ -115,27 +115,30 @@ export default function DashboardSidebar({ user, children }) {
 
             {/* Nav Links */}
             <nav className="flex-1 space-y-2 p-4">
-                {links.map((link) => {
-                    const Icon = link.icon;
+                {links
+                    .filter((link) => link.roles.includes(user?.role))
+                    .map((link) => {
+                        const Icon = link.icon;
 
-                    return (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={cn(
-                                "flex items-center gap-4 rounded-xl px-4 py-3 text-lg font-semibold transition-all",
-                                pathname === link.href
-                                    ? "bg-primary text-primary-foreground shadow-md"
-                                    : "hover:bg-muted"
-                            )}
-                        >
-                            <Icon className="size-5" />
+                        return (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className={cn(
+                                    "flex items-center gap-4 rounded-xl px-4 py-3 text-lg font-semibold transition-all",
+                                    pathname === link.href
+                                        ? "bg-primary text-primary-foreground shadow-md"
+                                        : "hover:bg-muted"
+                                )}
+                            >
+                                <Icon className="size-5" />
 
-                            {link.label}
-                        </Link>
-                    );
-                })}
+                                {link.label}
+                            </Link>
+                        );
+                    })}
             </nav>
+
 
             {/* Logout */}
             <div className="border-t p-4">

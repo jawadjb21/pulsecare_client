@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import {
     Dialog,
@@ -20,6 +21,8 @@ import AvatarField from "@/components/shared/fields/AvatarField";
 import BloodGroupField from "@/components/shared/fields/BloodGroupField";
 import LocationField from "@/components/shared/fields/LocationField";
 
+import { updateUser } from "@/lib/actions/updateUser";
+
 export default function UpdateProfileModal({
     user,
     children,
@@ -30,7 +33,7 @@ export default function UpdateProfileModal({
         control,
         watch,
         reset,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm({
         defaultValues: {
             name: user?.name || "",
@@ -38,10 +41,10 @@ export default function UpdateProfileModal({
             bloodGroup: user?.bloodGroup || "",
             district: user?.district || "",
             upazila: user?.upazila || "",
+            avatar: user?.image || "",
         },
     });
 
-    // In case user data arrives asynchronously
     useEffect(() => {
         reset({
             name: user?.name || "",
@@ -49,15 +52,43 @@ export default function UpdateProfileModal({
             bloodGroup: user?.bloodGroup || "",
             district: user?.district || "",
             upazila: user?.upazila || "",
+            avatar: null,
         });
     }, [user, reset]);
 
     const handleUpdate = async (data) => {
-        console.log(data);
+        try {
+            // If you later upload images to Cloudinary,
+            // replace avatar with uploaded image URL here.
 
-        // TODO:
-        // upload avatar if changed
-        // call update API
+            const updatedData = {
+                name: data.name,
+                email: data.email,
+                bloodGroup: data.bloodGroup,
+                district: data.district,
+                upazila: data.upazila,
+                image: data.avatar || user?.image,
+            };
+
+            const response = await updateUser(
+                user.id,
+                updatedData
+            );
+
+            if (response.success) {
+                toast.success(response.message);
+
+                reset(updatedData);
+            } else {
+                toast.error(
+                    response.message || "Failed to update profile."
+                );
+            }
+        } catch (error) {
+            console.log(error);
+
+            toast.error("Something went wrong.");
+        }
     };
 
     return (
@@ -117,9 +148,12 @@ export default function UpdateProfileModal({
 
                     <Button
                         type="submit"
-                        className="md:col-span-2 h-12 text-lg"
+                        className="h-12 text-lg md:col-span-2"
+                        disabled={isSubmitting}
                     >
-                        Update Profile
+                        {isSubmitting
+                            ? "Updating..."
+                            : "Update Profile"}
                     </Button>
                 </form>
             </DialogContent>

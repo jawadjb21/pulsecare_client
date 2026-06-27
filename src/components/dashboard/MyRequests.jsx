@@ -20,9 +20,9 @@ import { Badge } from "@/components/ui/badge";
 import {
     Card,
     CardContent,
+    CardDescription,
     CardHeader,
     CardTitle,
-    CardDescription,
 } from "@/components/ui/card";
 
 import {
@@ -38,20 +38,21 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import {
+    CalendarDays,
+    MapPin,
     Pencil,
     Trash2,
-    MapPin,
-    CalendarDays,
 } from "lucide-react";
 
 import UpdateRequestModal from "./UpdateRequestModal";
+
 import { deleteRequest } from "@/lib/actions/deleteRequest";
 
 export default function MyRequests({
+    user,
     requests = [],
-    pagination,
+    pagination = {},
 }) {
-
     const handleDelete = async (requestId) => {
         const response = await deleteRequest(requestId);
 
@@ -79,12 +80,10 @@ export default function MyRequests({
     };
 
     return (
-        <Card className="overflow-hidden rounded-3xl border-0 bg-gradient-to-br from-background via-background to-muted/20 shadow-2xl">
-
+        <Card className="overflow-hidden rounded-3xl border-0 bg-linear-to-br from-background via-background to-muted/20 shadow-2xl">
             {/* Header */}
             <CardHeader className="border-b bg-card/50 px-8 py-8 backdrop-blur">
                 <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-
                     <div>
                         <CardTitle className="text-4xl font-black tracking-tight">
                             My Blood Requests
@@ -101,108 +100,89 @@ export default function MyRequests({
                         </p>
 
                         <h3 className="text-3xl font-black text-primary">
-                            {pagination?.totalRequests || requests.length}
+                            {pagination?.totalRequests || 0}
                         </h3>
                     </div>
-
                 </div>
             </CardHeader>
 
             <CardContent className="space-y-8 p-8">
-
                 {/* Table */}
                 <div className="overflow-hidden rounded-3xl border bg-card shadow-md">
-
                     <Table>
-
                         <TableHeader className="bg-muted/40">
                             <TableRow>
-
-                                <TableHead className="h-14 font-bold uppercase tracking-wide">
+                                <TableHead>
                                     Recipient
                                 </TableHead>
 
-                                <TableHead className="font-bold uppercase tracking-wide text-center">
+                                <TableHead className="text-center">
                                     Blood
                                 </TableHead>
 
-                                <TableHead className="font-bold uppercase tracking-wide">
+                                <TableHead>
                                     Location
                                 </TableHead>
 
-                                <TableHead className="font-bold uppercase tracking-wide">
+                                <TableHead>
                                     Needed By
                                 </TableHead>
 
-                                <TableHead className="font-bold uppercase tracking-wide">
+                                <TableHead>
                                     Status
                                 </TableHead>
 
-                                <TableHead className="text-center font-bold uppercase tracking-wide">
+                                <TableHead className="text-center">
                                     Actions
                                 </TableHead>
-
                             </TableRow>
                         </TableHeader>
 
                         <TableBody>
-
-                            {requests?.length > 0 ? (
-
+                            {requests.length > 0 ? (
                                 requests.map((request) => (
-
                                     <TableRow
                                         key={request._id}
-                                        className="group transition-all duration-300 hover:bg-primary/5"
+                                        className="group hover:bg-primary/5"
                                     >
-
                                         {/* Recipient */}
                                         <TableCell>
-
                                             <div className="flex items-center gap-4">
-
-                                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-lg font-black text-primary">
+                                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 font-black text-primary">
                                                     {request.name?.charAt(0)}
                                                 </div>
 
                                                 <div>
-                                                    <h4 className="font-bold text-base">
+                                                    <p className="font-bold">
                                                         {request.name}
-                                                    </h4>
+                                                    </p>
 
                                                     <p className="text-sm text-muted-foreground">
                                                         Blood Recipient
                                                     </p>
                                                 </div>
-
                                             </div>
-
                                         </TableCell>
 
                                         {/* Blood Group */}
                                         <TableCell>
-
                                             <div className="flex justify-center">
-
-                                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-lg font-black text-red-600 shadow-sm dark:bg-red-900/30 dark:text-red-300">
+                                                <Badge
+                                                    variant="destructive"
+                                                    className="rounded-full px-4 py-2"
+                                                >
                                                     {request.bloodGroup}
-                                                </div>
-
+                                                </Badge>
                                             </div>
-
                                         </TableCell>
 
                                         {/* Location */}
                                         <TableCell>
-
                                             <div className="flex items-center gap-3">
-
-                                                <div className="rounded-full bg-primary/10 p-2">
-                                                    <MapPin className="h-4 w-4 text-primary" />
-                                                </div>
+                                                <MapPin className="h-4 w-4 text-primary" />
 
                                                 <div>
-                                                    <p className="font-semibold">
+                                                    <p className="font-medium">
                                                         {request.upazila}
                                                     </p>
 
@@ -210,95 +190,73 @@ export default function MyRequests({
                                                         {request.district}
                                                     </p>
                                                 </div>
-
                                             </div>
-
                                         </TableCell>
 
                                         {/* Date */}
                                         <TableCell>
+                                            <div className="flex items-center gap-3">
+                                                <CalendarDays className="h-4 w-4 text-primary" />
 
-                                            <div className="inline-flex items-center gap-3 rounded-2xl bg-muted px-4 py-3">
-
-                                                <CalendarDays className="h-5 w-5 text-primary" />
-
-                                                <div>
-                                                    <p className="font-semibold">
-                                                        {request.neededBy
-                                                            ? format(
-                                                                new Date(request.neededBy),
-                                                                "dd MMM"
-                                                            )
-                                                            : "N/A"}
-                                                    </p>
-
-                                                    <p className="text-xs text-muted-foreground">
-                                                        {request.neededBy
-                                                            ? format(
-                                                                new Date(request.neededBy),
-                                                                "yyyy"
-                                                            )
-                                                            : ""}
-                                                    </p>
-                                                </div>
-
+                                                <span className="font-medium">
+                                                    {request.neededBy
+                                                        ? format(
+                                                            new Date(
+                                                                request.neededBy
+                                                            ),
+                                                            "PPP"
+                                                        )
+                                                        : "N/A"}
+                                                </span>
                                             </div>
-
                                         </TableCell>
 
                                         {/* Status */}
                                         <TableCell>
-
                                             <Badge
-                                                className={`gap-2 rounded-full px-4 py-2 font-semibold capitalize ${getStatusClass(
+                                                className={`rounded-full capitalize ${getStatusClass(
                                                     request.status
                                                 )}`}
                                             >
-                                                <span className="h-2 w-2 rounded-full bg-current" />
-
                                                 {request.status}
                                             </Badge>
-
                                         </TableCell>
 
                                         {/* Actions */}
                                         <TableCell>
-
-                                            <div className="flex items-center justify-center gap-2">
-
-                                                <UpdateRequestModal request={request}>
+                                            <div className="flex justify-center gap-2">
+                                                <UpdateRequestModal
+                                                    request={request}
+                                                >
                                                     <Button
                                                         size="icon"
                                                         variant="ghost"
-                                                        className="rounded-full hover:bg-primary/10 hover:text-primary"
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                     </Button>
                                                 </UpdateRequestModal>
 
                                                 <AlertDialog>
-
                                                     <AlertDialogTrigger asChild>
                                                         <Button
                                                             size="icon"
                                                             variant="ghost"
-                                                            className="rounded-full hover:bg-destructive/10 hover:text-destructive"
+                                                            className="text-destructive"
                                                         >
                                                             <Trash2 className="h-4 w-4" />
                                                         </Button>
                                                     </AlertDialogTrigger>
 
                                                     <AlertDialogContent>
-
                                                         <AlertDialogHeader>
                                                             <AlertDialogTitle>
                                                                 Delete Request?
                                                             </AlertDialogTitle>
 
                                                             <AlertDialogDescription>
-                                                                This action cannot be undone.
-                                                                This will permanently delete
-                                                                your blood request.
+                                                                This action
+                                                                cannot be
+                                                                undone.
                                                             </AlertDialogDescription>
                                                         </AlertDialogHeader>
 
@@ -309,82 +267,53 @@ export default function MyRequests({
 
                                                             <AlertDialogAction
                                                                 onClick={() =>
-                                                                    handleDelete(request._id)
+                                                                    handleDelete(
+                                                                        request._id
+                                                                    )
                                                                 }
                                                                 className="bg-destructive hover:bg-destructive/90"
                                                             >
                                                                 Delete
                                                             </AlertDialogAction>
-
                                                         </AlertDialogFooter>
-
                                                     </AlertDialogContent>
-
                                                 </AlertDialog>
-
                                             </div>
-
                                         </TableCell>
-
                                     </TableRow>
-
                                 ))
-
                             ) : (
-
                                 <TableRow>
                                     <TableCell
                                         colSpan={6}
-                                        className="h-72"
+                                        className="h-52 text-center"
                                     >
-                                        <div className="flex flex-col items-center justify-center gap-4">
-
-                                            <div className="rounded-full bg-primary/10 p-6">
-                                                <span className="text-5xl">
-                                                    🩸
-                                                </span>
-                                            </div>
-
-                                            <h3 className="text-2xl font-bold">
-                                                No Requests Yet
-                                            </h3>
-
-                                            <p className="max-w-sm text-center text-muted-foreground">
-                                                You haven't created any blood requests yet.
-                                                Create your first request to connect with donors.
-                                            </p>
-
-                                        </div>
+                                        No blood requests found.
                                     </TableCell>
                                 </TableRow>
-
                             )}
-
                         </TableBody>
-
                     </Table>
-
                 </div>
 
                 {/* Pagination */}
                 {pagination?.totalPages > 1 && (
-
-                    <div className="flex items-center justify-center gap-6">
-
+                    <div className="flex items-center justify-center gap-4">
                         <Button
                             asChild
                             variant="outline"
-                            className="rounded-full px-6"
-                            disabled={pagination.currentPage === 1}
+                            disabled={
+                                pagination.currentPage === 1
+                            }
                         >
                             <Link
                                 href={`/dashboard/my-requests?page=${pagination.currentPage - 1}`}
                             >
-                                ← Previous
+                                Previous
                             </Link>
                         </Button>
 
-                        <div className="rounded-full bg-muted px-5 py-2 text-sm font-semibold">
+                        <div className="rounded-full bg-muted px-5 py-2 text-sm font-medium">
                             Page {pagination.currentPage} of{" "}
                             {pagination.totalPages}
                         </div>
@@ -392,7 +321,6 @@ export default function MyRequests({
                         <Button
                             asChild
                             variant="outline"
-                            className="rounded-full px-6"
                             disabled={
                                 pagination.currentPage ===
                                 pagination.totalPages
@@ -401,16 +329,12 @@ export default function MyRequests({
                             <Link
                                 href={`/dashboard/my-requests?page=${pagination.currentPage + 1}`}
                             >
-                                Next →
+                                Next
                             </Link>
                         </Button>
-
                     </div>
-
                 )}
-
             </CardContent>
-
         </Card>
     );
 }
