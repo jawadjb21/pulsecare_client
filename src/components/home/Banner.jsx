@@ -30,7 +30,7 @@ const defaultProps = {
 
     buttonPrimary: {
         text: "Request blood",
-        href: "/requests",
+        href: "/dashboard/create-requests",
     },
 
     buttonSecondary: {
