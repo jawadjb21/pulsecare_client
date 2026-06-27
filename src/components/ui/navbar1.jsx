@@ -36,8 +36,8 @@ const Navbar1 = ({
   user = null,
   className,
 }) => {
-  const menu = navLinks.slice(0, 5);
-  const auth = navLinks.slice(5,);
+  const menu = navLinks.slice(0, 4);
+  const auth = navLinks.slice(4,);
 
   const pathname = usePathname();
 

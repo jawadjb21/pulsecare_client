@@ -105,15 +105,6 @@ const ProfileDropdown = ({ user }) => {
                         </Link>
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem asChild>
-                        <Link
-                            href="#"
-                            className="cursor-pointer"
-                        >
-                            <Settings className="mr-2 h-4 w-4" />
-                            Settings
-                        </Link>
-                    </DropdownMenuItem>
                 </DropdownMenuGroup>
 
                 <DropdownMenuSeparator />
