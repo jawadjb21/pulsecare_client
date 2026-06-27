@@ -33,7 +33,7 @@ export default function NotFound() {
                     </Button>
 
                     <Button asChild variant="outline" size="lg">
-                        <Link href="/donors">
+                        <Link href="#">
                             Find Donors
                         </Link>
                     </Button>

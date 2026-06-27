@@ -35,7 +35,7 @@ const defaultProps = {
 
     buttonSecondary: {
         text: "Find Donors",
-        href: "/donors",
+        href: "#",
     },
 
     features: [
