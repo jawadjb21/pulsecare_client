@@ -41,18 +41,18 @@ const defaultProps = {
             links: [
                 { name: "Become a Donor", href: "/register" },
                 { name: "Donation Requests", href: "/requests" },
-                { name: "Eligibility Guide", href: "/eligibility" },
-                { name: "Donation Tips", href: "/tips" },
+                { name: "Eligibility Guide", href: "#" },
+                { name: "Donation Tips", href: "#" },
             ],
         },
 
         {
             title: "Support",
             links: [
-                { name: "Contact Us", href: "/contact" },
-                { name: "FAQs", href: "/faq" },
-                { name: "Emergency Support", href: "/support" },
-                { name: "Help Center", href: "/help" },
+                { name: "Contact Us", href: "#" },
+                { name: "FAQs", href: "#" },
+                { name: "Emergency Support", href: "#" },
+                { name: "Help Center", href: "#" },
             ],
         },
     ],
@@ -88,8 +88,8 @@ const defaultProps = {
     copyright: `© ${new Date().getFullYear()} PulseCare. All rights reserved.`,
 
     legalLinks: [
-        { name: "Privacy Policy", href: "/privacy" },
-        { name: "Terms & Conditions", href: "/terms" },
+        { name: "Privacy Policy", href: "#" },
+        { name: "Terms & Conditions", href: "#" },
     ],
 };
 
