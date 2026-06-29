@@ -1,5 +1,6 @@
 "use client";
-
+import { toast } from "sonner";
+import { donateToRequest } from "@/lib/actions/donateToRequest";
 import { format } from "date-fns";
 
 import {
@@ -24,6 +25,18 @@ import {
 export default function RequestDetails({
     request,
 }) {
+    const handleDonate = async () => {
+        const response = await donateToRequest(
+            request._id
+        );
+
+        if (response.success) {
+            toast.success(response.message);
+        } else {
+            toast.error(response.message);
+        }
+    };
+    
     if (!request) {
         return (
             <Card className="rounded-3xl">
@@ -135,8 +148,12 @@ export default function RequestDetails({
                     <Button
                         size="lg"
                         className="px-10"
+                        onClick={handleDonate}
+                        disabled={request.status !== "pending"}
                     >
-                        Donate
+                        {request.status === "pending"
+                            ? "Donate"
+                            : "Already Accepted"}
                     </Button>
                 </div>
 
