@@ -1,36 +1,233 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# PulseCare
 
-## Getting Started
+## Overview
 
-First, run the development server:
+PulseCare is a full-stack blood donation management platform designed to connect blood donors with recipients efficiently and securely. The platform enables users to create blood requests, manage donation activities, discover active requests, and contribute to life-saving initiatives through a modern and responsive web application.
+
+The system incorporates authentication, role-based access control (RBAC), request management, user administration, and online funding support to provide a complete blood donation ecosystem.
+
+---
+
+## Live Demo
+
+Frontend: `https://pulsecare-client-chi.vercel.app`
+
+Backend API: `https://pulsecare-server-sable.vercel.app`
+
+---
+
+## Features
+
+### Authentication & Authorization
+
+- Secure user authentication
+- JWT-based API authorization
+- Role-Based Access Control (RBAC)
+- Protected routes for authenticated users
+- Role-specific dashboard functionalities
+
+### User Roles
+
+| Role | Permissions |
+|------|-------------|
+| Donor | Create and manage blood requests, update profile, donate to requests |
+| Volunteer | Access donor features and manage users |
+| Admin | Full system control including user management and moderation |
+
+### Blood Request Management
+
+- Create blood donation requests
+- Update existing requests
+- Delete requests
+- View personal requests with pagination
+- Browse all public blood requests
+- Accept donation requests
+- View detailed request information
+
+### User Management
+
+- View all registered users
+- Promote donors to volunteers
+- Ban users
+- Delete users
+- Exclude administrators from accidental management actions
+
+### Profile Management
+
+- Update personal information
+- Upload profile image
+- Manage blood group and location information
+
+### Funding System
+
+- Stripe payment gateway integration
+- Secure donation checkout process
+- Success and cancellation handling
+
+### Additional Features
+
+- Server-side rendering (SSR)
+- Responsive design for mobile, tablet, and desktop devices
+- Pagination for large datasets
+- Toast notifications
+- Loading states and error handling
+- Modern dashboard UI
+
+---
+
+## Technology Stack
+
+### Frontend
+
+| Technology | Purpose |
+|------------|---------|
+| Next.js 15 | React framework |
+| React | User interface development |
+| Tailwind CSS | Styling |
+| shadcn/ui | Reusable UI components |
+| Lucide React | Icon library |
+| React Hook Form | Form management |
+| Sonner | Notifications |
+| date-fns | Date formatting |
+
+### Backend
+
+| Technology | Purpose |
+|------------|---------|
+| Node.js | Runtime environment |
+| Express.js | REST API development |
+| MongoDB | Database |
+| MongoDB Atlas | Cloud database hosting |
+| JOSE | JWT verification |
+
+### Authentication
+
+| Technology | Purpose |
+|------------|---------|
+| Better Auth | Authentication and session management |
+| JWT | API security |
+
+### Payment
+
+| Technology | Purpose |
+|------------|---------|
+| Stripe | Online payments and donations |
+
+---
+
+## Project Structure
+
+```bash
+pulsecare/
+├── frontend_pulsecare/
+├── backend_pulsecare/
+└── README.md
+```
+
+---
+
+## Environment Variables
+
+### Frontend
+
+```env
+NEXT_PUBLIC_SERVER_URL=
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+```
+
+### Backend
+
+```env
+PORT=
+MONGO_STRING=
+FRONTEND_URL=
+```
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/jawadjb21/pulsecare_client
+npm install
+
+
+git clone https://github.com/jawadjb21/pulsecare_server
+npm install
+```
+
+---
+
+## Running the Application
+
+### Backend
+
+```bash
+nodemon index.js
+```
+
+### Frontend
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## API Endpoints
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Requests
 
-## Learn More
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/requests` | Retrieve all requests |
+| GET | `/requests/:id` | Retrieve request details |
+| GET | `/requests/user` | Retrieve current user's requests |
+| POST | `/requests` | Create a new request |
+| PATCH | `/requests/:id` | Update a request |
+| DELETE | `/requests/:id` | Delete a request |
 
-To learn more about Next.js, take a look at the following resources:
+### Users
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/users` | Retrieve all users |
+| PATCH | `/users/:id` | Update user information |
+| DELETE | `/users/:id` | Delete user |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Security Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- JWT verification for protected APIs
+- Role-based route protection
+- Server-side authorization checks
+- Secure environment variable management
+- Authentication middleware for private routes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Future Improvements
+
+- Search and filtering system
+- Blood request approval workflow
+- Donation history tracking
+- Email notifications
+- Real-time chat between donor and recipient
+- Analytics dashboard
+- Admin reporting tools
+
+---
+
+## Author
+
+**Jawad Bin Jahangir**
+
+---
+
+## License
+
+This project is licensed under the MIT License.
